@@ -1,0 +1,43 @@
+name:                ec2-unikernel
+version:             0.9
+synopsis:            A handy tool for uploading unikernels to Amazon's EC2.
+description:         This tool uploads unikernels built with the HaLVM, Mirage,
+                     or other tools to Amazon's cloud. The unikernel will then
+                     appear as an AMI, which can be run and shared as needed.
+homepage:            http://github.com/GaloisInc/ec2-unikernel
+license:             BSD3
+license-file:        LICENSE
+author:              Adam Wick <awick@galois.com>
+maintainer:          Adam Wick <awick@galois.com>
+copyright:           Copyright 2016 Galois, Inc.
+category:            AWS, Unikernel
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable ec2-unikernel
+  main-is:             Main.hs
+  other-modules:       Options
+  default-extensions:  OverloadedStrings, TemplateHaskell
+  ghc-options:         -Wall
+  build-depends:
+                       amazonka,
+                       amazonka-core,
+                       amazonka-ec2,
+                       amazonka-s3,
+                       base,
+                       blaze-builder,
+                       bytestring,
+                       directory,
+                       filepath,
+                       http-client,
+                       lens,
+                       network-uri,
+                       process,
+                       semigroups,
+                       temporary,
+                       text,
+                       time >= 1.5,
+                       transformers,
+                       unix
+  hs-source-dirs:      src
+  default-language:    Haskell2010
