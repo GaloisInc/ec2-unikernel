@@ -22,7 +22,7 @@ before_install:
 install:
  - cabal sandbox init
  - cabal update
- - cabal install --only-dependencies --enable-tests -v2
+ - cabal install --only-dependencies --enable-tests -j1
 
 script:
  - cabal build
