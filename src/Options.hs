@@ -42,8 +42,8 @@ import System.Environment(lookupEnv)
 import System.Exit(ExitCode(ExitFailure), exitWith)
 import System.FilePath(takeFileName)
 
-data Options = Options {
-    _optAwsAccessKey :: AccessKey
+data Options = Options
+  { _optAwsAccessKey :: AccessKey
   , _optAwsSecretKey :: SecretKey
   , _optS3Bucket     :: BucketName
   , _optS3Zone       :: Text
@@ -58,8 +58,8 @@ data Options = Options {
 makeLenses ''Options
 
 defaultOptions :: Options
-defaultOptions = Options {
-    _optAwsAccessKey = fromString ""
+defaultOptions = Options
+  { _optAwsAccessKey = fromString ""
   , _optAwsSecretKey = fromString ""
   , _optS3Bucket     = fromString "unikernels"
   , _optS3Zone       = fromString "us-west-2a"
@@ -113,8 +113,8 @@ validateRegion r opts =
     Just v  -> addOpt   opts (set optAwsRegion v)
 
 regions :: [(String, Region)]
-regions = [
-    ("ireland", Ireland), ("eu-west-1", Ireland)
+regions =
+  [ ("ireland", Ireland), ("eu-west-1", Ireland)
   , ("frankfurt", Frankfurt), ("eu-central-1", Frankfurt)
   , ("tokyo", Tokyo), ("ap-northeast-1", Tokyo)
   , ("singapore", Singapore), ("ap-southeast-1", Singapore)
@@ -129,8 +129,8 @@ regions = [
   ]
 
 options :: [OptDescr (OptOrErr -> OptOrErr)]
-options = [
-    Option ['o'] ["aws-access-key"] (ReqArg validateAccessKey "KEY")
+options =
+  [ Option ['o'] ["aws-access-key"] (ReqArg validateAccessKey "KEY")
            "AWS access key to use"
   , Option ['w'] ["aws-secret-key"] (ReqArg validateSecretKey "VALUE")
            "AWS secret key to use"
@@ -213,5 +213,5 @@ fail' errs =
   do forM_ errs $ \ e -> putStrLn ("ERROR: " ++ e)
      putStrLn ("\n" ++ usageInfo hdr options)
      exitWith (ExitFailure 1)
- where  hdr = "Usage: ec2-unikernel [OPTION...] KERNEL [RAMDISK ...]"
+ where hdr = "Usage: ec2-unikernel [OPTION...] KERNEL [RAMDISK ...]"
 
