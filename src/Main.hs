@@ -127,8 +127,8 @@ buildDisk opts =
        return targetFile
 
 grubMenu :: Options -> String
-grubMenu opts = unlines ([
-    "default 0"
+grubMenu opts = unlines
+ ([ "default 0"
   , "timeout 1"
   , "title unikernel_boot"
   , "\troot (hd0,0)"
@@ -140,8 +140,8 @@ grubMenu opts = unlines ([
              | otherwise  = " " ++ kargs
 
 guestFishScript :: String -> Integer -> FilePath -> Options -> String
-guestFishScript diskName diskSize menu opts = unlines ([
-    "disk-create " ++ diskName ++ " raw " ++ show diskSize ++ "M"
+guestFishScript diskName diskSize menu opts = unlines
+ ([ "disk-create " ++ diskName ++ " raw " ++ show diskSize ++ "M"
   , "add " ++ diskName
   , "run"
   , "part-disk /dev/sda mbr"

@@ -6,7 +6,7 @@ is the unikernel, along with any auxiliary modules, uploads them to S3,
 and them bundles the whole collection as an AMI that you can then launch
 at will.
 
-THIS SOFTWARE IS ALPHA QUALITY.
+THIS SOFTWARE IS ALPHA QUALITY. BE WARNED.
 
 ## Where to Get Binaries
 
