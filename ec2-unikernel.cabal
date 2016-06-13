@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 
 executable ec2-unikernel
   main-is:             Main.hs
-  other-modules:       Options
+  other-modules:       Options, CommandLine
   default-extensions:  OverloadedStrings, TemplateHaskell
   ghc-options:         -Wall
   build-depends:

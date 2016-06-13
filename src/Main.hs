@@ -1,3 +1,4 @@
+import           CommandLine(getOptions)
 import           Control.Concurrent(threadDelay)
 import           Control.Lens(ASetter, set, view, elemOf, folded)
 import           Control.Monad(unless, void)
@@ -53,7 +54,7 @@ import           Network.AWS.S3.Types(completedMultipartUpload,
                                       bName)
 import           Network.AWS.S3.UploadPart(uploadPart, uprsETag,
                                            uprsResponseStatus)
-import           Options(Options, getOptions, optS3Bucket, optTargetKey, optImageName,
+import           Options(Options, optS3Bucket, optTargetKey, optImageName,
                          optS3Bucket, optTargetKey, optKernel, optKernelArgs,
                          optRamdisks, optS3Bucket, optAwsRegion)
 import           System.Directory(copyFile)
