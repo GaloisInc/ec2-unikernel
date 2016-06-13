@@ -1,6 +1,7 @@
 dist/
 .cabal-sandbox/
 rpmbuild/
+results/
 cabal.sandbox.config
 *.raw
 *.swp

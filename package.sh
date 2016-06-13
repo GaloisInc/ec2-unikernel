@@ -1,12 +1,15 @@
 #!/bin/sh
 rpm_package() {
   mkdir -p rpmbuild/{SOURCES,SPECS}
+  mkdir -p results
   cabal sdist
   cp dist/ec2-unikernel*.tar.gz rpmbuild/SOURCES/
   cp packaging/ec2-unikernel.spec rpmbuild/SPECS/
   rpmbuild -ba --define "_version ${MY_VERSION}"     \
                --define "_topdir ${TOPDIR}/rpmbuild" \
                rpmbuild/SPECS/ec2-unikernel.spec
+  cp rpmbuild/RPMS/*/ec2-unikernel-${MY_VERSION}-1.fc*.rpm results/
+  cp rpmbuild/SRPMS/ec2-unikernel-${MY_VERSION}-1.*.src.rpm results/
 }
 
 source /etc/os-release
