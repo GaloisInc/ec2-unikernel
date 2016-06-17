@@ -1,0 +1,18 @@
+Source: ec2-unikernel
+Section: devel
+Priority: optional
+Maintainer: HaLVM Maintainers <halvm-devel@community.galois.com>
+Build-Depends: debhelper (>= 8.0.0), ghc, cabal-install, zlib1g, libghc-lens-dev, libghc-profunctors-dev, libghc-unix-dev, libghc-tls-dev, libghc-temporary-dev
+Standards-Version: 3.9.4
+Homepage: http://github.com/GaloisInc/ec2-unikernel
+Vcs-Git: git://github.com/GaloisInc/ec2-unikernel
+Vcs-Browser: http://github.com/GaloisInc/ec2-unikernel
+
+Package: ec2-unikernel
+Architecture: amd64 i386
+Depends: libguestfs-tools, libgmp, zlib1g
+Description: A tool for uploading unikernels to EC2
+ A tool for automatically uploading, importing, and registering
+ unikernels into EC2. Includes support for initrds / initramfs /
+ modules, as well, and should be configurable via normal ec2
+ environment variables and falgs.

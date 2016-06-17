@@ -5,3 +5,5 @@ results/
 cabal.sandbox.config
 *.raw
 *.swp
+ec2-unikernel-*
+ec2-unikernel_*
