@@ -60,10 +60,12 @@ missing. (See the section on "Prerequisites" for non-software requirements.)
 If you're prefer to build from source, you can either pull the latest
 version from Hackage by doing:
 
-   cabal install ec2-unikernel
+```
+cabal install ec2-unikernel
+```
 
-Or you can get the bleeding edge by pulling this repository and doing
-a `cabal install` directly. If you do the latter, let me suggest that a
+Or you can get the bleeding edge by pulling this repository and running
+`cabal install` directly. If you do the latter, let me suggest that a
 sandbox (or the forthcoming new-configure/new-build/new-install chain)
 might be your friend, as `ec2-unikernel` has one hell of a dependency
 chain.
