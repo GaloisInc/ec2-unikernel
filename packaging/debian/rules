@@ -1,0 +1,43 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+packagever=$(subst version: ,,$(shell ghc-pkg field $1 version))
+constraint=--constraint "$1 ==$(call packagever,$1)"
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	rm -rf dist .cabal-sandbox cabal.sandbox.config
+
+override_dh_auto_build:
+	cabal sandbox init
+	cabal update
+	cabal install --only-dependencies                     \
+	              $(call constraint,adjunctions)          \
+	              $(call constraint,base)                 \
+	              $(call constraint,bifunctors)           \
+	              $(call constraint,bytestring)           \
+	              $(call constraint,contravariant)        \
+	              $(call constraint,data-default-class)   \
+	              $(call constraint,directory)            \
+	              $(call constraint,filepath)             \
+	              $(call constraint,free)                 \
+	              $(call constraint,kan-extensions)       \
+	              $(call constraint,lens)                 \
+	              $(call constraint,process)              \
+	              $(call constraint,profunctors)          \
+	              $(call constraint,semigroupoids)        \
+	              $(call constraint,semigroups)           \
+	              $(call constraint,temporary)            \
+	              $(call constraint,text)                 \
+	              $(call constraint,time)                 \
+	              $(call constraint,tls)                  \
+	              $(call constraint,unix)                 \
+	              $(call constraint,x509)                 \
+	              $(call constraint,x509-store)           \
+	              $(call constraint,x509-validation)
+	cabal install --disable-executable-dynamic

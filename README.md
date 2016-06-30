@@ -10,7 +10,46 @@ THIS SOFTWARE IS ALPHA QUALITY. BE WARNED.
 
 ## Where to Get Binaries
 
-TBD
+### Fedora Binaries
+
+The easiest way to get binary installations for Fedora 22, 23, and 24
+is through the HaLVM repositories. Using this method will also get you
+automatically updated when successive versions come out. To use the
+HaLVM repositories, run `dnf install` with one of the following links,
+depending on your version and architecture:
+
+  * Fedora 22 (32-bit):
+    (http://repos.halvm.org/fedora-22/i686/halvm-yum-repo-22-3.fc22.noarch.rpm)
+  * Fedora 23 (32-bit):
+    (http://repos.halvm.org/fedora-23/i686/halvm-yum-repo-23-3.fc23.noarch.rpm)
+  * Fedora 24 (32-bit):
+    (http://repos.halvm.org/fedora-24/i686/halvm-yum-repo-24-3.fc24.noarch.rpm)
+  * Fedora 22 (64-bit):
+    (http://repos.halvm.org/fedora-22/x86_64/halvm-yum-repo-22-3.fc22.noarch.rpm)
+  * Fedora 23 (64-bit):
+    (http://repos.halvm.org/fedora-23/x86_64/halvm-yum-repo-23-3.fc23.noarch.rpm)
+  * Fedora 24 (64-bit):
+    (http://repos.halvm.org/fedora-24/x86_64/halvm-yum-repo-24-3.fc24.noarch.rpm)
+
+Then run `dnf update` to get all the information you need on the
+packages in this repository, and `dnf install ec2-unikernel` to install
+the tool
+
+### Ubuntu Binaries
+
+Ubuntu binaries are also available on `repos.halvm.org`, although not
+in a nice friendly repository structure. (As an aside, if someone wants
+to tell me how I could make such a thing, please send me an email.) So
+you'll just need to download these manually:
+
+  * Ubuntu 16.04 (32-bit):
+    (http://repos.halvm.org/ubuntu-16.04/i686/ec2-unikernel_0.9-1_i386.deb)
+  * Ubuntu 16.04 (64-bit):
+    (http://repos.halvm.org/ubuntu-16.04/x86_64/ec2-unikernel_0.9-1_amd64.deb)
+
+Both of these packages should be signed with the HaLVM Maintainer key (fetch
+[here](http://repos.halvm.org/RPM-GPG-KEY-HaLVM), fingerprint 6240d595) using
+the `dpkg-sig` tool, if you want to verify the release.
 
 ## Installation
 
@@ -21,10 +60,12 @@ missing. (See the section on "Prerequisites" for non-software requirements.)
 If you're prefer to build from source, you can either pull the latest
 version from Hackage by doing:
 
-   cabal install ec2-unikernel
+```
+cabal install ec2-unikernel
+```
 
-Or you can get the bleeding edge by pulling this repository and doing
-a `cabal install` directly. If you do the latter, let me suggest that a
+Or you can get the bleeding edge by pulling this repository and running
+`cabal install` directly. If you do the latter, let me suggest that a
 sandbox (or the forthcoming new-configure/new-build/new-install chain)
 might be your friend, as `ec2-unikernel` has one hell of a dependency
 chain.

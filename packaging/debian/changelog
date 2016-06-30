@@ -1,0 +1,6 @@
+ec2-unikernel (VERSION-1) unstable; urgency=low
+
+  * Debian packaging
+
+ -- Adam Wick <awick@galois.com>  NOW
+ 
