@@ -64,6 +64,7 @@ import           System.FilePath(takeFileName, (</>))
 import           System.IO.Temp(withSystemTempDirectory)
 import           System.Posix.Files(fileSize, getFileStatus)
 import           System.Process(callProcess)
+import           System.Timeout(timeout)
 
 main :: IO ()
 main =
@@ -343,7 +344,15 @@ logm :: String -> String -> IO ()
 logm category message = putStrLn (category ++ ": " ++ message)
 
 awsSend :: AWSRequest r => Env -> r -> IO (Rs r)
-awsSend e x = runResourceT (runAWS e (send x))
+awsSend env request = go 5 request
+ where
+  go :: AWSRequest r => Int -> r -> IO (Rs r)
+  go 0 _ = fail "Amazon request failed."
+  go x v =
+    do mrsp <- timeout (15 * 1000000) (runResourceT (runAWS env (send v)))
+       case mrsp of
+         Nothing  -> putStrLn "Retrying." >> go (x - 1) v
+         Just rsp -> return rsp
 
 show' :: Maybe Text -> String
 show' Nothing  = ""
