@@ -116,7 +116,8 @@ findPVGrubAKI e =
 buildDisk :: Options -> IO FilePath
 buildDisk opts =
   withSystemTempDirectory "ec2-unikernel" $ \ path ->
-    do sizeb <- fileSize `fmap` getFileStatus (view optKernel opts)
+    do logm "DISK" ("Building disk.")
+       sizeb <- fileSize `fmap` getFileStatus (view optKernel opts)
        let sizem = ceiling (fromInteger (fromIntegral sizeb) / onemeg) + 1
        writeFile (path </> "menu.lst") (grubMenu opts)
        writeFile (path </> "guestfish.scr")
@@ -125,6 +126,7 @@ buildDisk opts =
        callProcess "guestfish" ["-f", path </> "guestfish.scr"]
        let targetFile = unpack (toText (view optTargetKey opts))
        copyFile (path </> "disk.raw") targetFile
+       logm "DISK" ("Built disk " ++ targetFile)
        return targetFile
 
 grubMenu :: Options -> String
@@ -190,13 +192,15 @@ makeBucket opts e =
 
 uploadFile :: Options -> Env -> FilePath -> IO ()
 uploadFile opts e filename =
-  do rsp <- awsSend e (createMultipartUpload bucket key)
+  do logm "UPLOAD" "Creating upload."
+     rsp <- awsSend e (createMultipartUpload bucket key)
      case (view cmursUploadId rsp, view cmursResponseStatus rsp) of
        (Nothing, code) ->
          putStrLn ("ERROR: Upload initialization failed with code: "++show code)
        (Just upId, _) ->
          do bytes <- L.readFile filename
             sizeb <- fileSize `fmap` getFileStatus filename
+            logm "UPLOAD" "Starting upload."
             runUpload upId 0 (fromIntegral sizeb) bytes 1 []
  where
   bucket = view optS3Bucket  opts
@@ -225,7 +229,8 @@ uploadFile opts e filename =
         do let (chunkBS, rest) = L.splitAt amazonMinimimPartSizeInBytes bytes
                chunk           = Hashed (toHashed chunkBS)
                sentSize'       = sentSize + contentLength chunk
-           rsp <- awsSend e (uploadPart bucket key partNo upId chunk)
+               req             = uploadPart bucket key partNo upId chunk
+           rsp <- awsSend e req
            case (view uprsETag rsp, view uprsResponseStatus rsp) of
              (Nothing, code) ->
                do putStrLn ("ERROR: Upload failed with code: " ++ show code)
