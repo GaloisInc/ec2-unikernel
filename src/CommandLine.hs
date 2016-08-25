@@ -46,7 +46,7 @@ validateSecretKey sk opts
   | length sk /= 40           = addError opts "Secret key doesn't look right."
   | any (not . isSecKeyCh) sk = addError opts "Secret key has weird characters."
   | otherwise                 = addOpt opts (set optAwsSecretKey (fromString sk))
- where isSecKeyCh c = isAlphaNum c || (c == '/')
+ where isSecKeyCh c = isAlphaNum c || (c == '/') || (c == '+')
 
 validateS3Bucket :: String -> OptOrErr -> OptOrErr
 validateS3Bucket b opts
