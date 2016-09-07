@@ -16,7 +16,7 @@ import Network.AWS.EC2.DescribeAvailabilityZones(describeAvailabilityZones,
                                                  dazrsAvailabilityZones,
                                                  dazZoneNames)
 import Network.AWS.EC2.Types(azZoneName)
-import Network.AWS.Types(Error(..), serviceCode)
+import Network.AWS.Types(ServiceError, Error(..))
 import Options
 import System.Console.GetOpt(ArgDescr(..), OptDescr(..), ArgOrder(..))
 import System.Console.GetOpt(getOpt, usageInfo)
@@ -137,15 +137,27 @@ getOptions argv =
          zoneRequest = set dazZoneNames [region] describeAvailabilityZones
      r <- catch ((runResourceT . runAWS e) (send zoneRequest))
             (\ (ServiceError se) ->
-               do putStr   "ERROR: Failed to connect with Amazon. "
-                  putStrLn "This is typically a problem with your keys."
-                  putStrLn ("       ("++show(view serviceCode se)++")")
-                  putStrLn (show se)
+               do printInitialServiceError se
                   exitWith (ExitFailure 1))
      let z = Just (view optS3Zone opts)
      unless (elemOf (dazrsAvailabilityZones . folded . azZoneName) z r) $
        fail' ["Invalid availability zone for region."]
      return (opts, e)
+
+printInitialServiceError :: ServiceError -> IO ()
+printInitialServiceError se =
+  do putStrLn "ERROR: Failed to get list of zones from Amazon. This typically"
+     putStrLn "is caused by one of two problems:"
+     putStrLn ""
+     putStrLn "  #1: There's something wrong with your keys. Check your"
+     putStrLn "      arguments, or make sure AWS_ACCESS_KEY and AWS_SECRET_KEY"
+     putStrLn "      are what you want them to be."
+     putStrLn "  #2: There's something wrong with your computer's clock. Run"
+     putStrLn "      whatever software you have to synchronize your clock, and"
+     putStrLn "      try again."
+     putStrLn ""
+     putStrLn "Just in case it's useful, here's the raw error:"
+     putStrLn (show se)
 
 adjustTargetName :: UTCTime -> Options -> Options
 adjustTargetName now opts
