@@ -1,7 +1,7 @@
 import           CommandLine(getOptions)
 import           Control.Concurrent(threadDelay)
 import           Control.Lens(ASetter, set, view, elemOf, folded)
-import           Control.Monad(unless, void)
+import           Control.Monad(unless, void, foldM)
 import qualified Data.ByteString.Lazy as L
 import           Data.Int(Int64)
 import           Data.List(sortBy)
@@ -118,17 +118,22 @@ buildDisk :: Options -> IO FilePath
 buildDisk opts =
   withSystemTempDirectory "ec2-unikernel" $ \ path ->
     do logm "DISK" ("Building disk.")
-       sizeb <- fileSize `fmap` getFileStatus (view optKernel opts)
+       sizeb0 <- fileSize `fmap` getFileStatus (view optKernel opts)
+       sizeb <- foldM addSize sizeb0 (view optRamdisks opts)
        let sizem = ceiling (fromInteger (fromIntegral sizeb) / onemeg) + 1
        writeFile (path </> "menu.lst") (grubMenu opts)
        writeFile (path </> "guestfish.scr")
                  (guestFishScript (path </> "disk.raw") sizem
-                                  (path </> "menu.lst") opts)
+                                 (path </> "menu.lst") opts)
        callProcess "guestfish" ["-f", path </> "guestfish.scr"]
        let targetFile = unpack (toText (view optTargetKey opts))
        copyFile (path </> "disk.raw") targetFile
        logm "DISK" ("Built disk " ++ targetFile)
        return targetFile
+ where
+  addSize inSize fileName =
+    do fsize <- fileSize `fmap` getFileStatus fileName
+       return (fsize + inSize)
 
 grubMenu :: Options -> String
 grubMenu opts = unlines
