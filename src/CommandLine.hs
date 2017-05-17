@@ -1,7 +1,7 @@
 module CommandLine(getOptions)
  where
 
-import Control.Exception(catch)
+import Control.Exception(SomeException,catch)
 import Control.Lens(ASetter, view, set, elemOf, folded)
 import Control.Monad(forM_, unless, when)
 import Data.Char(isAlphaNum, toLower)
@@ -10,13 +10,12 @@ import Data.String(IsString, fromString)
 import Data.Time.Clock(UTCTime, getCurrentTime)
 import Data.Time.Format(formatTime, defaultTimeLocale)
 import Network.AWS(Region(..), Credentials(..), Env,
-                   runAWS, runResourceT, newEnv, send)
+                   runAWS, runResourceT, newEnv, send, envRegion)
 import Network.AWS.Data(toText)
 import Network.AWS.EC2.DescribeAvailabilityZones(describeAvailabilityZones,
                                                  dazrsAvailabilityZones,
                                                  dazZoneNames)
 import Network.AWS.EC2.Types(azZoneName)
-import Network.AWS.Types(ServiceError, Error(..))
 import Options
 import System.Console.GetOpt(ArgDescr(..), OptDescr(..), ArgOrder(..))
 import System.Console.GetOpt(getOpt, usageInfo)
@@ -132,11 +131,11 @@ getOptions argv =
      let akey  = view optAwsAccessKey opts
          skey  = view optAwsSecretKey opts
          creds = FromKeys akey skey
-     e <- newEnv (view optAwsRegion opts) creds
+     e <- set envRegion (view optAwsRegion opts) `fmap` newEnv creds
      let region = toText (view optS3Zone opts)
          zoneRequest = set dazZoneNames [region] describeAvailabilityZones
      r <- catch ((runResourceT . runAWS e) (send zoneRequest))
-            (\ (ServiceError se) ->
+            (\ se ->
                do printInitialServiceError se
                   exitWith (ExitFailure 1))
      let z = Just (view optS3Zone opts)
@@ -144,7 +143,7 @@ getOptions argv =
        fail' ["Invalid availability zone for region."]
      return (opts, e)
 
-printInitialServiceError :: ServiceError -> IO ()
+printInitialServiceError :: SomeException -> IO ()
 printInitialServiceError se =
   do putStrLn "ERROR: Failed to get list of zones from Amazon. This typically"
      putStrLn "is caused by one of two problems:"
