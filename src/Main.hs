@@ -13,7 +13,7 @@ import           Network.AWS(Env, AWSRequest, Rs, runResourceT, runAWS, send)
 import           Network.AWS.Data.Body(RqBody(..), toHashed, contentLength)
 import           Network.AWS.Data.Text(toText)
 import           Network.AWS.EC2.DescribeImages(describeImages, deseOwners, deseFilters,
-                                                desrsImages)
+                                                diirsImages)
 import           Network.AWS.EC2.DescribeImportSnapshotTasks(DescribeImportSnapshotTasksResponse,
                                                              distImportTaskIds,
                                                              describeImportSnapshotTasks,
@@ -85,7 +85,7 @@ main =
 findPVGrubAKI :: Env -> IO Text
 findPVGrubAKI e =
   do res <- awsSend e findRequest
-     let grubs = filter isPVGrub (view desrsImages res)
+     let grubs = filter isPVGrub (view diirsImages res)
      case reverse (sortBy sortGrubs grubs) of
        [] ->
          abort "Couldn't find PV-GRUB kernel for your region."
