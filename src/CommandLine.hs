@@ -55,9 +55,8 @@ validateS3Bucket b opts
 
 validateZone :: String -> OptOrErr -> OptOrErr
 validateZone z opts
-  | z `elem` zones = addOpt   opts (set optS3Zone (fromString z))
+  | z `elem` availabilityZones = addOpt   opts (set optS3Zone (fromString z))
   | otherwise      = addError opts "Unknown S3 zone."
- where zones = ["us-west-2a", "eu-west-2a", "eu-west-2b", "eu-west-2c"]
 
 validateRegion :: String -> OptOrErr -> OptOrErr
 validateRegion r opts =
@@ -80,6 +79,22 @@ regions =
   , ("govcloudfips", GovCloudFIPS), ("fips-us-gov-west-1", GovCloudFIPS)
   , ("saopaulo", SaoPaulo), ("sa-east-1", SaoPaulo)
   , ("london", London), ("eu-west-2", London)
+  ]
+
+availabilityZones :: [String]
+availabilityZones =
+  [ "us-west-2a"
+  , "us-west-2b"
+  , "us-west-2c"
+  , "eu-west-1a"
+  , "eu-west-1b"
+  , "eu-west-1c"
+  , "eu-west-2a"
+  , "eu-west-2b"
+  , "eu-west-2c"
+  , "eu-central-1a"
+  , "eu-central-1b"
+  , "eu-central-1c"
   ]
 
 options :: [OptDescr (OptOrErr -> OptOrErr)]
