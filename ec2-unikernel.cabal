@@ -13,7 +13,7 @@ copyright:           Copyright 2016 Galois, Inc.
 category:            AWS, Unikernel
 build-type:          Simple
 extra-doc-files:     README.md
-cabal-version:       >=1.10
+cabal-version:       >=1.18
 Tested-with:         GHC == 7.10.3, GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
 
 executable ec2-unikernel
