@@ -1,5 +1,5 @@
 name:                ec2-unikernel
-version:             0.9.7
+version:             0.9.8
 synopsis:            A handy tool for uploading unikernels to Amazon's EC2.
 description:         This tool uploads unikernels built with the HaLVM, Mirage,
                      or other tools to Amazon's cloud. The unikernel will then
