@@ -14,6 +14,7 @@ category:            AWS, Unikernel
 build-type:          Simple
 extra-doc-files:     README.md
 cabal-version:       >=1.10
+Tested-with:         GHC == 7.10.3, GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
 
 executable ec2-unikernel
   main-is:             Main.hs
@@ -21,10 +22,10 @@ executable ec2-unikernel
   default-extensions:  OverloadedStrings, TemplateHaskell
   ghc-options:         -Wall
   build-depends:
-                       amazonka       >= 1.5.0 && < 1.6.0,
-                       amazonka-core  >= 1.5.0 && < 1.6.0,
-                       amazonka-ec2   >= 1.5.0 && < 1.6.0,
-                       amazonka-s3    >= 1.5.0 && < 1.6.0,
+                       amazonka       >= 1.5.0 && < 1.7.0,
+                       amazonka-core  >= 1.5.0 && < 1.7.0,
+                       amazonka-ec2   >= 1.5.0 && < 1.7.0,
+                       amazonka-s3    >= 1.5.0 && < 1.7.0,
                        base           >= 4.7.0 && < 5.0.0,
                        bytestring     >= 0.10  && < 0.12,
                        directory      >= 1.2.2 && < 1.4,
@@ -34,7 +35,7 @@ executable ec2-unikernel
                        semigroups     >= 0.18  && < 0.20,
                        temporary      >= 1.2.0 && < 1.4,
                        text           >= 1.2.2 && < 1.4,
-                       time           >= 1.5   && < 1.9,
+                       time           >= 1.5   && < 1.10,
                        unix           >= 2.7.1 && < 2.9
   hs-source-dirs:      src
   default-language:    Haskell2010
