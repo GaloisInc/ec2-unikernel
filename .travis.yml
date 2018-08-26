@@ -5,3 +5,5 @@ ghc:
   - "8.0"
   - "8.2"
   - "8.4"
+
+install: travis_wait 30 cabal install --only-dependencies --enable-tests
